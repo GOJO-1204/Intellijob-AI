@@ -11,12 +11,12 @@ class Profile < ApplicationRecord
   validate :resume_is_pdf_or_docx_under_limit
 
   scope :ready, -> {
-    where.not(resume_text: [nil, ""]).where.not(target_role: [nil, ""])
+    where.not(resume_text: [ nil, "" ]).where.not(target_role: [ nil, "" ])
   }
 
   # String: role + skills + resume text, used for the embedding.
   def embedding_text
-    [target_role, Array(target_skills).join(", "), resume_text].compact_blank.join("\n")
+    [ target_role, Array(target_skills).join(", "), resume_text ].compact_blank.join("\n")
   end
 
   # Boolean
