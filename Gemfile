@@ -70,7 +70,7 @@ gem "pdf-reader", "~> 2.16"
 
 gem "docx", "~> 0.13.0"
 
-gem "bullet", "~> 8.2", group: :development
+gem "bullet", "~> 8.3", group: :development
 
 gem "informers", "~> 1.3"
 
