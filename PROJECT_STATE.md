@@ -10,6 +10,7 @@
 - B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
 - B-2.1: JobSources.all -> [Remotive]; JobSources::Remotive.fetch -> Array<Hash> (10 keys, [] on error)
 - Note: Remotive returned 14 jobs on 16 Oct (plan said 20+); keys and types verified
+- B-2.2: Job.upsert_from(hash) -> Job (nil when url blank); assigns only the 9 source keys, never id/url/embedding
 ## In progress
 - none
 ## Known issues
