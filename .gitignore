@@ -30,3 +30,7 @@
 
 /public/assets
 /config/*.key
+
+# Tailwind build output
+/app/assets/builds/*
+!/app/assets/builds/.keep
