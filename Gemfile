@@ -71,3 +71,11 @@ gem "pdf-reader", "~> 2.16"
 gem "docx", "~> 0.13.0"
 
 gem "bullet", "~> 8.2", group: :development
+
+gem "informers", "~> 1.3"
+
+gem "sidekiq", "~> 8.1"
+
+gem "sidekiq-cron", "~> 2.4"
+
+gem "letter_opener", "~> 1.10", group: :development
