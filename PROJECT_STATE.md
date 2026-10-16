@@ -7,6 +7,9 @@
 - A-1.3: App shell merged. HomeController#index (public landing, signed-in users go to dashboard_path), DashboardController#show (empty placeholder), shared/_navbar and shared/_flash partials, routes: root, devise_for :users, resource :dashboard
 - A: Anthropic key added to credentials (Rails.application.credentials.anthropic.api_key)
 - B-1.2: db/seeds.rb (demo@example.com, 1 ready profile, 10 jobs with source 'seed')
+- B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
+- B-2.1: JobSources.all -> [Remotive]; JobSources::Remotive.fetch -> Array<Hash> (10 keys, [] on error)
+- Note: Remotive returned 14 jobs on 16 Oct (plan said 20+); keys and types verified
 ## In progress
 - none
 ## Known issues
