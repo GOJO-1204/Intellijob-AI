@@ -13,7 +13,9 @@
 - B-2.2: Job.upsert_from(hash) -> Job (nil when url blank); assigns only the 9 source keys, never id/url/embedding
 - B-3.1: JobSources::Adzuna.fetch -> Array<Hash> (same 10 keys, country 'in', 3 keywords, 150 max, [] per failed request)
 - B-3.1: JobSources.all -> [Remotive, Adzuna]
+- B-3.2: FetchJobsJob.perform (no args) -> for each JobSources.all source: fetch, Job.upsert_from per hash, logs fetched/saved/skipped counts; one failing source never stops the others; EmbedRecordsJob added in B-4.2
 ## In progress
 - none
 ## Known issues
 - Seed user has a known password: delete or change it before production (Day 14)
+- Adzuna redirect_url contains Adzuna's own utm_source (looks like our app_id). app_key is not in it. Low severity; review in B-13.1 (security) before putting these urls in emails.
