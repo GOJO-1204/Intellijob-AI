@@ -1,5 +1,5 @@
 module JobSources
   def self.all
-    [ Remotive ]
+    [ Remotive, Adzuna ]
   end
 end
