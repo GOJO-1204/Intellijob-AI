@@ -27,6 +27,7 @@
 - B-4.2: EmbedRecordsJob.perform (no args) -> embeds Job.recent and Profile.ready rows with nil embedding via Embedder, rescued per record, logs counts only; FetchJobsJob now ends with EmbedRecordsJob.perform_later; MatchJobsJob is added in B-5.2
 - Decision: AI tips use the Gemini API (free tier). Key in credentials: gemini: api_key.
 - B-5.1: Matcher.call(profile, limit: 20) -> Array<[Job, Float]>; SQL hard filters (remote, location ILIKE escaped, salary) before cosine similarity; excludes source 'manual', keeps NULL sources; [] when profile embedding is nil; writes nothing
+- B-5.2: MatchJobsJob.perform(user_id = nil) -> Matcher per Profile.ready (or one user), JobApplication.find_or_create_by with status 'matched' and score only on create, never overwrites existing rows; rescued per profile, logs counts and error class only; EmbedRecordsJob now ends with MatchJobsJob.perform_later
 ## In progress
 - none
 ## Known issues
