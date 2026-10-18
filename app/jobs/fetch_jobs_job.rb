@@ -1,6 +1,7 @@
 class FetchJobsJob < ApplicationJob
   def perform
     JobSources.all.each { |source| import_source(source) }
+    EmbedRecordsJob.perform_later
   end
 
   private

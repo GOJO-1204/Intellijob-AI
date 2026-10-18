@@ -15,6 +15,7 @@
 - B-3.1: JobSources.all -> [Remotive, Adzuna]
 - B-3.2: FetchJobsJob.perform (no args) -> for each JobSources.all source: fetch, Job.upsert_from per hash, logs fetched/saved/skipped counts; one failing source never stops the others; EmbedRecordsJob added in B-4.2
 - B-4.1: Embedder.call(text) -> Array<Float> (384, mean pooled, normalized); model loaded once per process; first use downloads ~90 MB; text cut to 2000 chars; blank text raises ArgumentError
+- B-4.2: EmbedRecordsJob.perform (no args) -> embeds Job.recent and Profile.ready rows with nil embedding via Embedder, rescued per record, logs counts only; FetchJobsJob now ends with EmbedRecordsJob.perform_later; MatchJobsJob is added in B-5.2
 ## In progress
 - none
 ## Known issues
