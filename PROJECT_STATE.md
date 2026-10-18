@@ -5,6 +5,15 @@
 - B-1.1: Adzuna keys added to Rails credentials
 - A-1.2: models, migrations and model tests merged; importmap setup merged
 - A-1.3: App shell merged. HomeController#index (public landing, signed-in users go to dashboard_path), DashboardController#show (empty placeholder), shared/_navbar and shared/_flash partials, routes: root, devise_for :users, resource :dashboard
+- A-2.1: ResumeParser.call(attachment) -> String (PDF via pdf/reader, DOCX via docx; raises ResumeParser::Error)
+- A-2.2: ProfilesController#new, #create (upload -> ResumeParser -> profile.update(resume_text:) -> ResumeAnalysisJob.perform_later(profile.id)); view profiles/new; route resource :profile (new, create, show)
+- A: .gitignore for app/assets/builds (#20)
+- A-3.1a: ResumeAnalyzer.new(text, target_skills:, page_count:).call -> {score:, checks:, shortcomings:} (symbol keys); defines ResumeAnalyzer::COMMON_SKILLS
+- A-3.1b: ResumeAiReviewer.new(text, target_role:).call -> Array<{original:, improved:, why:}> (symbol keys, [] on any error); Gemini via Net::HTTP, key in the x-goog-api-key header, model in one constant (ResumeAiReviewer::MODEL = "gemini-3.1-flash-lite")
+- A: credentials: anthropic section removed, gemini: api_key added (#28)
+- A-3.1c: ResumeAnalysisJob.perform(profile_id) -> saves ats_score and ats_feedback {checks:, shortcomings:}, then ai_suggestions; page_count from PDF::Reader (nil for DOCX); a missing profile or blank resume_text is skipped
+- A-3.2: ProfilesController#show (current_user.profile only; redirects to new_profile_path without resume_text); view profiles/show (score, checks, shortcomings, AI tips, "Analyzing..." state with a Refresh link while ats_score is nil)
+- A: one real PDF upload checked end to end in development (async adapter): score saved, 5 AI tips saved
 - A: Gemini key goes in credentials (Rails.application.credentials.dig(:gemini, :api_key))
 - B-1.2: db/seeds.rb (demo@example.com, 1 ready profile, 10 jobs with source 'seed')
 - B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
@@ -22,3 +31,7 @@
 ## Known issues
 - Seed user has a known password: delete or change it before production (Day 14)
 - Adzuna redirect_url contains Adzuna's own utm_source (looks like our app_id). app_key is not in it. Low severity; review in B-13.1 (security) before putting these urls in emails.
+- Gemini free tier: the model is gemini-3.1-flash-lite. Free-tier limits are unconfirmed (one guide reports about 500 requests/day for Flash-Lite). On HTTP 404 or 429, change only ResumeAiReviewer::MODEL.
+- Resume text is sent to the Gemini API, and free-tier data may be used by Google to improve its products. Mention this in the README and in the security task (B-13.1).
+- The results page has no automatic refresh while analyzing (manual Refresh link). Turbo status updates come in a later task.
+- Development uses the default async job adapter. Sidekiq and Redis are not needed until B adds config/initializers/sidekiq.rb.
