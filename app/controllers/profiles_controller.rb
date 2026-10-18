@@ -17,6 +17,13 @@ class ProfilesController < ApplicationController
     rerender(e.record.errors.full_messages.to_sentence)
   end
 
+  def show
+    @profile = current_user.profile
+    return if @profile&.resume_text.present?
+
+    redirect_to new_profile_path, alert: "Please upload a resume with readable text."
+  end
+
   private
 
   def resume_param
