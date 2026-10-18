@@ -14,6 +14,7 @@
 - B-3.1: JobSources::Adzuna.fetch -> Array<Hash> (same 10 keys, country 'in', 3 keywords, 150 max, [] per failed request)
 - B-3.1: JobSources.all -> [Remotive, Adzuna]
 - B-3.2: FetchJobsJob.perform (no args) -> for each JobSources.all source: fetch, Job.upsert_from per hash, logs fetched/saved/skipped counts; one failing source never stops the others; EmbedRecordsJob added in B-4.2
+- B-4.1: Embedder.call(text) -> Array<Float> (384, mean pooled, normalized); model loaded once per process; first use downloads ~90 MB; text cut to 2000 chars; blank text raises ArgumentError
 ## In progress
 - none
 ## Known issues
