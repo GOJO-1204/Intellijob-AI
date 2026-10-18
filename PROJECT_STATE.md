@@ -26,6 +26,7 @@
 - B-4.1: Embedder.call(text) -> Array<Float> (384, mean pooled, normalized); model loaded once per process; first use downloads ~90 MB; text cut to 2000 chars; blank text raises ArgumentError
 - B-4.2: EmbedRecordsJob.perform (no args) -> embeds Job.recent and Profile.ready rows with nil embedding via Embedder, rescued per record, logs counts only; FetchJobsJob now ends with EmbedRecordsJob.perform_later; MatchJobsJob is added in B-5.2
 - Decision: AI tips use the Gemini API (free tier). Key in credentials: gemini: api_key.
+- B-5.1: Matcher.call(profile, limit: 20) -> Array<[Job, Float]>; SQL hard filters (remote, location ILIKE escaped, salary) before cosine similarity; excludes source 'manual', keeps NULL sources; [] when profile embedding is nil; writes nothing
 ## In progress
 - none
 ## Known issues
