@@ -1,0 +1,22 @@
+<%
+  saved = Array(profile.target_skills)
+  checked = saved.empty? ? suggested : saved & suggested
+  extra = (saved - suggested).join(", ")
+%>
+<div>
+  <p class="<%= lbl %>">Skills</p>
+  <% if suggested.empty? %>
+    <p class="mt-1 text-xs text-gray-500">We did not find known skills in your resume. Add yours below.</p>
+  <% else %>
+    <p class="mt-1 text-xs text-gray-500">Skills found in your resume. Untick any that do not apply.</p>
+    <div class="mt-2 flex flex-wrap gap-3">
+      <% suggested.each do |skill| %>
+        <label class="inline-flex items-center gap-1 text-sm text-gray-700">
+          <%= check_box_tag "profile[target_skills][]", skill, checked.include?(skill), id: nil %>
+          <%= skill %>
+        </label>
+      <% end %>
+    </div>
+  <% end %>
+  <%= text_field_tag "profile[extra_skills]", extra, placeholder: "Other skills, separated by commas", class: inp %>
+</div>

@@ -4,11 +4,17 @@ class Profile < ApplicationRecord
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   ].freeze
   MAX_RESUME_SIZE = 5.megabytes
+  EXPERIENCE_LEVELS = %w[entry mid senior].freeze
+  ALERT_FREQUENCIES = %w[daily weekly paused].freeze
 
   belongs_to :user
   has_one_attached :resume
 
   validate :resume_is_pdf_or_docx_under_limit
+  validates :target_role, presence: true, on: :preferences
+  validates :alert_frequency, inclusion: { in: ALERT_FREQUENCIES }
+  validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS }, allow_blank: true
+  validates :salary_min, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
   scope :ready, -> {
     where.not(resume_text: [ nil, "" ]).where.not(target_role: [ nil, "" ])
