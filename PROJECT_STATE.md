@@ -5,7 +5,7 @@
 - B-1.1: Adzuna keys added to Rails credentials
 - A-1.2: models, migrations and model tests merged; importmap setup merged
 - A-1.3: App shell merged. HomeController#index (public landing, signed-in users go to dashboard_path), DashboardController#show (empty placeholder), shared/_navbar and shared/_flash partials, routes: root, devise_for :users, resource :dashboard
-- A: Anthropic key added to credentials (Rails.application.credentials.anthropic.api_key)
+- A: Gemini key goes in credentials (Rails.application.credentials.dig(:gemini, :api_key))
 - B-1.2: db/seeds.rb (demo@example.com, 1 ready profile, 10 jobs with source 'seed')
 - B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
 - B-2.1: JobSources.all -> [Remotive]; JobSources::Remotive.fetch -> Array<Hash> (10 keys, [] on error)
@@ -16,6 +16,7 @@
 - B-3.2: FetchJobsJob.perform (no args) -> for each JobSources.all source: fetch, Job.upsert_from per hash, logs fetched/saved/skipped counts; one failing source never stops the others; EmbedRecordsJob added in B-4.2
 - B-4.1: Embedder.call(text) -> Array<Float> (384, mean pooled, normalized); model loaded once per process; first use downloads ~90 MB; text cut to 2000 chars; blank text raises ArgumentError
 - B-4.2: EmbedRecordsJob.perform (no args) -> embeds Job.recent and Profile.ready rows with nil embedding via Embedder, rescued per record, logs counts only; FetchJobsJob now ends with EmbedRecordsJob.perform_later; MatchJobsJob is added in B-5.2
+- Decision: AI tips use the Gemini API (free tier). Key in credentials: gemini: api_key.
 ## In progress
 - none
 ## Known issues
