@@ -2,6 +2,7 @@ class EmbedRecordsJob < ApplicationJob
   def perform
     embed_group("Job", Job.recent.where(embedding: nil))
     embed_group("Profile", Profile.ready.where(embedding: nil))
+    MatchJobsJob.perform_later
   end
 
   private
