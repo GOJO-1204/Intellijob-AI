@@ -108,7 +108,7 @@ CONFIG (B)
 
 PIPELINE (who triggers whom)
   Upload -> ProfilesController#create -> ResumeParser -> profile.update(resume_text:)
-    -> ResumeAnalysisJob (ATS score + Claude tips)
+    -> ResumeAnalysisJob (ATS score + Gemini tips)
   Save questions -> PreferencesController#update -> profile.update(embedding: nil)
     -> EmbedRecordsJob
   Every 6h -> FetchJobsJob -> JobSources.all -> Job.upsert_from -> EmbedRecordsJob
