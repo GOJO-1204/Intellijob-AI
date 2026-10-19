@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   resource :profile, only: %i[new create show]
   resource :preferences, only: %i[edit update]
     resources :matches, only: :index
+      resources :job_applications, only: :update
   get "unsubscribe/:token", to: "unsubscribes#show", as: :unsubscribe
 end
