@@ -15,6 +15,11 @@
 - A-3.2: ProfilesController#show (current_user.profile only; redirects to new_profile_path without resume_text); view profiles/show (score, checks, shortcomings, AI tips, "Analyzing..." state with a Refresh link while ats_score is nil)
 - A: one real PDF upload checked end to end in development (async adapter): score saved, 5 AI tips saved
 - A: Gemini key goes in credentials (Rails.application.credentials.dig(:gemini, :api_key))
+- A-4.1: SkillExtractor.call(text) -> Array<String>: skills from ResumeAnalyzer::COMMON_SKILLS found in the text (whole word, case-insensitive), lowercase, in list order, no duplicates, [] for blank or nil text (#33)
+- A-4.2: PreferencesController#edit and #update (current_user.profile only; no resume_text redirects to new_profile_path); views preferences/edit and preferences/_skills; route resource :preferences (edit, update); navbar link. Saves target_role, target_skills (SkillExtractor suggestions plus an extra_skills text field), location, remote, salary_min, experience_level, alert_frequency; sets embedding: nil and enqueues EmbedRecordsJob (#36)
+- A-4.2: Profile validations: alert_frequency in Profile::ALERT_FREQUENCIES (daily, weekly, paused); experience_level in Profile::EXPERIENCE_LEVELS (entry, mid, senior) or blank; salary_min integer >= 0 or nil; target_role required only in the :preferences validation context (#36)
+- A-4.2: test setup: test/test_helper.rb uses parallelize(workers: 1). Past 50 tests Rails went parallel and the Postgres test database deadlocked and timed out, and CI hung (#37)
+- A-4.3: HomeController#index routes signed-in users: no resume_text goes to new_profile_path, no target_role to edit_preferences_path, otherwise dashboard_path (#39)
 - B-1.2: db/seeds.rb (demo@example.com, 1 ready profile, 10 jobs with source 'seed')
 - B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
 - B-2.1: JobSources.all -> [Remotive]; JobSources::Remotive.fetch -> Array<Hash> (10 keys, [] on error)
