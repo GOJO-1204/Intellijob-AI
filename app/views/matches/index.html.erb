@@ -1,0 +1,15 @@
+<div class="mx-auto max-w-3xl py-10">
+  <h1 class="text-2xl font-semibold text-gray-900">Your job matches</h1>
+
+  <% if @applications.empty? %>
+    <div class="mt-6">
+      <%= render "shared/empty_state",
+            title: "No matches yet",
+            message: "Matches appear after new jobs are fetched and your preferences are saved. Check back soon." %>
+    </div>
+  <% else %>
+    <ul class="mt-6 space-y-3">
+      <%= render partial: "job_applications/job_application", collection: @applications %>
+    </ul>
+  <% end %>
+</div>
