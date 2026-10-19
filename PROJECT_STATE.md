@@ -34,6 +34,7 @@
 - B-5.1: Matcher.call(profile, limit: 20) -> Array<[Job, Float]>; SQL hard filters (remote, location ILIKE escaped, salary) before cosine similarity; excludes source 'manual', keeps NULL sources; [] when profile embedding is nil; writes nothing
 - B-5.2: MatchJobsJob.perform(user_id = nil) -> Matcher per Profile.ready (or one user), JobApplication.find_or_create_by with status 'matched' and score only on create, never overwrites existing rows; rescued per profile, logs counts and error class only; EmbedRecordsJob now ends with MatchJobsJob.perform_later
 - B-6.1: JobAlertMailer.new_matches(user, applications) -> mail to user.email, subject "<N> new job matches for you"; html and text views (title, company, location, score %, APPLY link only for http/https urls, dashboard link, signed unsubscribe link); sets no notified_at; route unsubscribe/:token -> unsubscribes#show added (controller comes in B-9.2, so the link 404s until then); development uses letter_opener
+- B-6.2: SendAlertsJob.perform(frequency) -> only 'daily' or 'weekly' run (anything else returns); for each user whose profile alert_frequency matches, takes the top 5 alertable applications (score desc) and calls JobAlertMailer.new_matches(user, apps).deliver_later, then sets notified_at on exactly those ids; rescued per user, logs user id and error class only; leftover matches go out in the next run; cron schedule added in B-8.1
 ## In progress
 - none
 ## Known issues
@@ -43,3 +44,4 @@
 - Resume text is sent to the Gemini API, and free-tier data may be used by Google to improve its products. Mention this in the README and in the security task (B-13.1).
 - The results page has no automatic refresh while analyzing (manual Refresh link). Turbo status updates come in a later task.
 - Development uses the default async job adapter. Sidekiq and Redis are not needed until B adds config/initializers/sidekiq.rb.
+- SendAlertsJob sets notified_at right after the email is enqueued, not after it is delivered. If delivery fails later, those matches are not retried. Review in B-11.1 (reliability).
