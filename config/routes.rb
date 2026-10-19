@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   root "home#index"
   resource :dashboard, only: :show, controller: "dashboard"
   resource :profile, only: %i[new create show]
+  get "unsubscribe/:token", to: "unsubscribes#show", as: :unsubscribe
 end
