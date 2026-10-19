@@ -28,6 +28,7 @@
 - Decision: AI tips use the Gemini API (free tier). Key in credentials: gemini: api_key.
 - B-5.1: Matcher.call(profile, limit: 20) -> Array<[Job, Float]>; SQL hard filters (remote, location ILIKE escaped, salary) before cosine similarity; excludes source 'manual', keeps NULL sources; [] when profile embedding is nil; writes nothing
 - B-5.2: MatchJobsJob.perform(user_id = nil) -> Matcher per Profile.ready (or one user), JobApplication.find_or_create_by with status 'matched' and score only on create, never overwrites existing rows; rescued per profile, logs counts and error class only; EmbedRecordsJob now ends with MatchJobsJob.perform_later
+- B-6.1: JobAlertMailer.new_matches(user, applications) -> mail to user.email, subject "<N> new job matches for you"; html and text views (title, company, location, score %, APPLY link only for http/https urls, dashboard link, signed unsubscribe link); sets no notified_at; route unsubscribe/:token -> unsubscribes#show added (controller comes in B-9.2, so the link 404s until then); development uses letter_opener
 ## In progress
 - none
 ## Known issues

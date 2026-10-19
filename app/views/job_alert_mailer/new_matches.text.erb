@@ -1,0 +1,20 @@
+<%# app/views/job_alert_mailer/new_matches.text.erb %>
+Hello,
+
+Here are your latest job matches:
+<% @applications.each do |application| -%>
+<% job = application.job -%>
+
+<%= job.title %>
+<%= job.company %><%= " - #{job.location}" if job.location.present? %>
+<% unless application.score.nil? -%>
+Match: <%= (application.score * 100).round %>%
+<% end -%>
+<% if job.url.to_s.start_with?("http://", "https://") -%>
+APPLY: <%= job.url %>
+<% end -%>
+<% end -%>
+
+Dashboard: <%= dashboard_url %>
+
+Unsubscribe: <%= unsubscribe_url(token: @user.signed_id(purpose: :unsubscribe)) %>
