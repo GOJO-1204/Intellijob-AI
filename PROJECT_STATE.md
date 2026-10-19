@@ -20,6 +20,8 @@
 - A-4.2: Profile validations: alert_frequency in Profile::ALERT_FREQUENCIES (daily, weekly, paused); experience_level in Profile::EXPERIENCE_LEVELS (entry, mid, senior) or blank; salary_min integer >= 0 or nil; target_role required only in the :preferences validation context (#36)
 - A-4.2: test setup: test/test_helper.rb uses parallelize(workers: 1). Past 50 tests Rails went parallel and the Postgres test database deadlocked and timed out, and CI hung (#37)
 - A-4.3: HomeController#index routes signed-in users: no resume_text goes to new_profile_path, no target_role to edit_preferences_path, otherwise dashboard_path (#39)
+- A-5.1: MatchesController#index (current_user.job_applications.matched, includes job, score desc with NULLs last); route resources :matches, only: :index; views matches/index, shared/_empty_state (locals title, message) and job_applications/_job_application (card: title, company, location, score %, Apply link for http/https urls only); navbar Matches link (#42)
+- A-5.2: JobApplicationsController#update (current_user.job_applications.find, permits only status and notes, unknown status -> 422, turbo_stream replaces the card, html redirects to matches_path); route resources :job_applications, only: :update (new/create come in 5.3); card now has a status select and notes. Turbo was never loaded: added pin "@hotwired/turbo-rails" in config/importmap.rb and the import in app/javascript/application.js (#43)
 - B-1.2: db/seeds.rb (demo@example.com, 1 ready profile, 10 jobs with source 'seed')
 - B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
 - B-2.1: JobSources.all -> [Remotive]; JobSources::Remotive.fetch -> Array<Hash> (10 keys, [] on error)
@@ -45,3 +47,4 @@
 - The results page has no automatic refresh while analyzing (manual Refresh link). Turbo status updates come in a later task.
 - Development uses the default async job adapter. Sidekiq and Redis are not needed until B adds config/initializers/sidekiq.rb.
 - SendAlertsJob sets notified_at right after the email is enqueued, not after it is delivered. If delivery fails later, those matches are not retried. Review in B-11.1 (reliability).
+- After Save on the matches page the card stays on screen until a reload (the page lists only matched rows). Handle it with the dashboard tabs. Turbo is now loaded on every page, so login, resume upload and preferences forms should be clicked through once (asked B).
