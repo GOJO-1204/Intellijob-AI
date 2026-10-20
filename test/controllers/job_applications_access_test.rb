@@ -35,4 +35,15 @@ class JobApplicationsAccessTest < ActionDispatch::IntegrationTest
     get matches_path
     assert_select "script[type=importmap]", text: %r{@hotwired/turbo-rails}
   end
+
+  test "the card has a dismiss button and dismissed matches are not listed" do
+    me = new_user
+    record = match_for(me)
+    sign_in me
+    get matches_path
+    assert_select "form[action=?] input[value=dismissed]", job_application_path(record)
+    record.dismissed!
+    get matches_path
+    assert_select "li#job_application_#{record.id}", false
+  end
 end
