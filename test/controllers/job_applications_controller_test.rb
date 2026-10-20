@@ -42,4 +42,14 @@ class JobApplicationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to matches_path
     assert_not_nil record.reload.applied_at
   end
+
+  test "dismissing saves the status and removes the card by turbo stream" do
+    me = new_user
+    record = match_for(me)
+    sign_in me
+    patch_application(record, { status: "dismissed" }, headers: TURBO)
+    assert_response :success
+    assert_select "turbo-stream[action=remove][target=job_application_#{record.id}]"
+    assert_equal "dismissed", record.reload.status
+  end
 end
