@@ -22,6 +22,8 @@
 - A-4.3: HomeController#index routes signed-in users: no resume_text goes to new_profile_path, no target_role to edit_preferences_path, otherwise dashboard_path (#39)
 - A-5.1: MatchesController#index (current_user.job_applications.matched, includes job, score desc with NULLs last); route resources :matches, only: :index; views matches/index, shared/_empty_state (locals title, message) and job_applications/_job_application (card: title, company, location, score %, Apply link for http/https urls only); navbar Matches link (#42)
 - A-5.2: JobApplicationsController#update (current_user.job_applications.find, permits only status and notes, unknown status -> 422, turbo_stream replaces the card, html redirects to matches_path); route resources :job_applications, only: :update (new/create come in 5.3); card now has a status select and notes. Turbo was never loaded: added pin "@hotwired/turbo-rails" in config/importmap.rb and the import in app/javascript/application.js (#43)
+- A-5.3: dashboard/show renders shared/_empty_state (locals title, message) instead of its own markup; navbar now has Dashboard, Matches, Profile, Preferences, Log out; test/controllers/dashboard_controller_test.rb (#46)
+- A-5.4: test/controllers/profiles_upload_test.rb, 5 tests for ProfilesController#create (sign-in redirect, no file, unsupported type, valid PDF saves resume_text and enqueues ResumeAnalysisJob, PDF without readable text); fixture_file_upload needs the third argument true (binary) on Windows, otherwise the parser reports a corrupt file; the ResumeParser.call stub is restored with define_singleton_method(:call, original) (#48)
 - B-1.2: db/seeds.rb (demo@example.com, 1 ready profile, 10 jobs with source 'seed')
 - B-2.0: informers, sidekiq, sidekiq-cron, letter_opener gems added
 - B-2.1: JobSources.all -> [Remotive]; JobSources::Remotive.fetch -> Array<Hash> (10 keys, [] on error)
@@ -49,3 +51,4 @@
 - Development uses the default async job adapter. Sidekiq and Redis are not needed until B adds config/initializers/sidekiq.rb.
 - SendAlertsJob sets notified_at right after the email is enqueued, not after it is delivered. If delivery fails later, those matches are not retried. Review in B-11.1 (reliability).
 - After Save on the matches page the card stays on screen until a reload (the page lists only matched rows). Handle it with the dashboard tabs. Turbo is now loaded on every page, so login, resume upload and preferences forms should be clicked through once (asked B).
+- A PDF without readable text still enqueues ResumeAnalysisJob (the job skips blank text) and the user is redirected twice (show, then new). Low severity; revisit in A-11.1 (error handling).
