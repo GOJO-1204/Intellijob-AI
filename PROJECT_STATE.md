@@ -37,6 +37,7 @@
 - B-5.2: MatchJobsJob.perform(user_id = nil) -> Matcher per Profile.ready (or one user), JobApplication.find_or_create_by with status 'matched' and score only on create, never overwrites existing rows; rescued per profile, logs counts and error class only; EmbedRecordsJob now ends with MatchJobsJob.perform_later
 - B-6.1: JobAlertMailer.new_matches(user, applications) -> mail to user.email, subject "<N> new job matches for you"; html and text views (title, company, location, score %, APPLY link only for http/https urls, dashboard link, signed unsubscribe link); sets no notified_at; route unsubscribe/:token -> unsubscribes#show added (controller comes in B-9.2, so the link 404s until then); development uses letter_opener
 - B-6.2: SendAlertsJob.perform(frequency) -> only 'daily' or 'weekly' run (anything else returns); for each user whose profile alert_frequency matches, takes the top 5 alertable applications (score desc) and calls JobAlertMailer.new_matches(user, apps).deliver_later, then sets notified_at on exactly those ids; rescued per user, logs user id and error class only; leftover matches go out in the next run; cron schedule added in B-8.1
+- B-7.1: lib/tasks/smoke.rake: `rails smoke` prints PASS/FAIL for 5 steps (seed data, fetch, embed, match, alert preview); no network by default (LIVE=1 runs the real FetchJobsJob); alert step only builds the mail, never delivers, never sets notified_at; refuses to run in production; exit code 1 on any failure
 ## In progress
 - none
 ## Known issues
