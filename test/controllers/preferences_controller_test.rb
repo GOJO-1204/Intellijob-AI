@@ -48,7 +48,7 @@ class PreferencesControllerTest < ActionDispatch::IntegrationTest
   test "update saves preferences, clears the embedding and enqueues the embed job" do
     profile = signed_in_profile(resume_text: "Ruby", embedding: [ 0.1, 0.2 ])
     assert_enqueued_with(job: EmbedRecordsJob) { patch preferences_path, params: good_params }
-    assert_redirected_to dashboard_path
+    assert_redirected_to matches_path
     profile.reload
     assert_equal [ "ruby", "rails", "go" ], profile.target_skills
     assert_equal "weekly", profile.alert_frequency
@@ -76,7 +76,7 @@ class PreferencesControllerTest < ActionDispatch::IntegrationTest
   test "update ignores attributes outside the form" do
     profile = signed_in_profile
     patch preferences_path, params: good_params(ats_score: "99")
-    assert_redirected_to dashboard_path
+    assert_redirected_to matches_path
     assert_nil profile.reload.ats_score
   end
 
