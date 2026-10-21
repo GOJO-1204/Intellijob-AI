@@ -78,7 +78,7 @@ profiles_controller (A)     new, create (resume upload), show (ATS results)
 preferences_controller (A)  edit, update (the question form)
 matches_controller (A)      index (current user's matched applications by score)
 job_applications_controller (A)  update (permits status, notes; turbo_stream)
-                            ADDED: new, create (add a job applied elsewhere)
+                                 new, create: planned Day 10 (A-10.3), not built yet (add a job applied elsewhere)
 dashboard_controller (A)    show (tabs by params[:status])
 unsubscribes_controller (B) show (finds user by token, sets alert_frequency 'paused',
                             no login needed)
@@ -90,14 +90,16 @@ ROUTES (final)
   resource :preferences, only: %i[edit update]
   resources :matches, only: :index
   resource :dashboard, only: :show, controller: 'dashboard'
-  resources :job_applications, only: %i[new create update]     <- new/create ADDED
+  resources :job_applications, only: :update     <- new/create planned Day 10 (A-10.3), not built yet
   get 'unsubscribe/:token', to: 'unsubscribes#show', as: :unsubscribe
 
 VIEWS (A unless noted)
-  layouts/application, shared/_navbar, shared/_flash, shared/_empty_state,
-  profiles/new, profiles/show, preferences/edit, matches/index,
-  job_applications/_job_application (card with status select, notes, turbo frame),
-  job_applications/new (ADDED), dashboard/show, dashboard/_stats (B)
+  layouts/application, shared/_navbar, shared/_flash, shared/_empty_state (locals title, message),
+  profiles/new, profiles/show, preferences/edit, preferences/_skills, matches/index,
+  job_applications/_job_application (card: li with dom_id, status select, notes, Save, Dismiss,
+  Apply; replaced by turbo_stream, no turbo_frame), job_applications/update.turbo_stream,
+  job_applications/new (planned Day 10, A-10.3, not built yet),
+  dashboard/show (shell with empty state so far), dashboard/_stats (B)
 
 CONFIG (B)
   config/initializers/sidekiq.rb, config/sidekiq_cron.yml:
