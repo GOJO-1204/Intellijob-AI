@@ -9,7 +9,7 @@ class PreferencesController < ApplicationController
     @profile.assign_attributes(preference_params.merge(target_skills: skills_from_params, embedding: nil))
     if @profile.save(context: :preferences)
       EmbedRecordsJob.perform_later
-      redirect_to dashboard_path, notice: "Preferences saved."
+      redirect_to matches_path, notice: "Preferences saved."
     else
       @suggested = SkillExtractor.call(@profile.resume_text)
       render :edit, status: :unprocessable_entity
