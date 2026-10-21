@@ -68,7 +68,7 @@ gem "devise", "~> 5.0"
 
 gem "pdf-reader", "~> 2.16"
 
-gem "docx", "~> 0.13.0"
+gem "docx", "~> 0.13.3"
 
 gem "bullet", "~> 8.2", group: :development
 
