@@ -46,4 +46,14 @@ class JobApplicationsAccessTest < ActionDispatch::IntegrationTest
     get matches_path
     assert_select "li#job_application_#{record.id}", false
   end
+
+  test "a turbo save shows a Saved note in the replaced card" do
+    me = new_user
+    record = match_for(me)
+    sign_in me
+    patch job_application_path(record), params: { job_application: { status: "saved" } },
+                                        headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    assert_response :success
+    assert_includes response.body, "Saved."
+  end
 end
