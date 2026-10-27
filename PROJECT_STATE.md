@@ -42,6 +42,7 @@
 - B-6.1: JobAlertMailer.new_matches(user, applications) -> mail to user.email, subject "<N> new job matches for you"; html and text views (title, company, location, score %, APPLY link only for http/https urls, dashboard link, signed unsubscribe link); sets no notified_at; route unsubscribe/:token -> unsubscribes#show added (controller comes in B-9.2, so the link 404s until then); development uses letter_opener
 - B-6.2: SendAlertsJob.perform(frequency) -> only 'daily' or 'weekly' run (anything else returns); for each user whose profile alert_frequency matches, takes the top 5 alertable applications (score desc) and calls JobAlertMailer.new_matches(user, apps).deliver_later, then sets notified_at on exactly those ids; rescued per user, logs user id and error class only; leftover matches go out in the next run; cron schedule added in B-8.1
 - B-7.1: lib/tasks/smoke.rake: `rails smoke` prints PASS/FAIL for 5 steps (seed data, fetch, embed, match, alert preview); no network by default (LIVE=1 runs the real FetchJobsJob); alert step only builds the mail, never delivers, never sets notified_at; refuses to run in production; exit code 1 on any failure
+- B-8.1: config/initializers/sidekiq.rb (Redis URL from ENV REDIS_URL, default redis://127.0.0.1:6379/0, never logged; loads config/sidekiq_cron.yml); config/sidekiq_cron.yml schedules 3 jobs in Asia/Kolkata: fetch_jobs (FetchJobsJob every 6 hours), send_alerts_daily (SendAlertsJob daily at 08:00), send_alerts_weekly (SendAlertsJob weekly, Mondays 08:00); queue_adapter :sidekiq set in development and production only, test unchanged; CleanupJobsJob joins the schedule in B-10.1
 ## In progress
 - none
 ## Known issues
@@ -50,7 +51,7 @@
 - Gemini free tier: the model is gemini-3.1-flash-lite. Free-tier limits are unconfirmed (one guide reports about 500 requests/day for Flash-Lite). On HTTP 404 or 429, change only ResumeAiReviewer::MODEL.
 - Resume text is sent to the Gemini API, and free-tier data may be used by Google to improve its products. Mention this in the README and in the security task (B-13.1).
 - The results page has no automatic refresh while analyzing (manual Refresh link). Turbo status updates come in a later task.
-- Development uses the default async job adapter. Sidekiq and Redis are not needed until B adds config/initializers/sidekiq.rb.
+- Development now uses Sidekiq (queue_adapter :sidekiq since B-8.1). Redis/Memurai must be running at 127.0.0.1:6379 and the worker started with: bundle exec sidekiq -q default -q mailers. Without the worker, perform_later jobs and deliver_later mails do not run. The test environment keeps its own adapter.
 - SendAlertsJob sets notified_at right after the email is enqueued, not after it is delivered. If delivery fails later, those matches are not retried. Review in B-11.1 (reliability).
 - After Save on the matches page the card stays on screen until a reload (the page lists only matched rows). Handle it with the dashboard tabs. Turbo is now loaded on every page, so login, resume upload and preferences forms should be clicked through once (asked B).
 - A PDF without readable text still enqueues ResumeAnalysisJob (the job skips blank text) and the user is redirected twice (show, then new). Low severity; revisit in A-11.1 (error handling).
