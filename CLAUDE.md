@@ -17,3 +17,13 @@ Schema and registry: see REGISTRY.md.
 Ownership: A = resume/user side. B = jobs/automation side.
 Git: branch per task (a/..., b/...), one PR per task reviewed by the other person,
   never push to main. Credentials: one person edits at a time.
+
+## Design rules (see DESIGN.md)
+- Read DESIGN.md before building any screen, email or page.
+- Accent teal #0F766E, hover #115E59. Status colors red, amber, green.
+- System fonts, corner radius 6 to 8px, minimal motion.
+- No purple. No gradients. No pill shaped buttons.
+- No fake metrics, reviews or testimonials. Numbers are real database counts.
+- No emoji as icons. No AI slop copy, no stock AI images, no "AI generated" badge.
+- No dashes as punctuation in user facing copy. Use a full stop or a comma.
+- Never bring back the rejected "Synapse" design.
