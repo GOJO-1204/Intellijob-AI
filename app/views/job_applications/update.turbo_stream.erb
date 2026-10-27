@@ -2,6 +2,6 @@
   <%= turbo_stream.remove dom_id(@job_application) %>
 <% else %>
   <%= turbo_stream.replace dom_id(@job_application) do %>
-    <%= render partial: "job_applications/job_application", locals: { job_application: @job_application } %>
+    <%= render partial: "job_applications/job_application", locals: { job_application: @job_application, notice: "Saved." } %>
   <% end %>
 <% end %>
