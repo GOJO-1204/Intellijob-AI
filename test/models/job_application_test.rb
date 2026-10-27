@@ -1,7 +1,5 @@
 require "test_helper"
 
-require "test_helper"
-
 class JobApplicationTest < ActiveSupport::TestCase
   setup do
     @user = User.create!(email: "a@example.com", password: "password123")
@@ -38,5 +36,48 @@ class JobApplicationTest < ActiveSupport::TestCase
   test "a user cannot apply to the same job twice" do
     duplicate = JobApplication.new(user: @user, job: @job)
     assert_not duplicate.valid?
+  end
+
+  test "does not stamp applied_at for dismissed" do
+    @application.update!(status: :dismissed)
+
+    assert_nil @application.applied_at
+  end
+
+  test "keeps applied_at on a second save while still applied" do
+    first = nil
+
+    travel_to Time.zone.local(2026, 3, 2, 10, 0, 0) do
+      @application.update!(status: :applied)
+      first = @application.applied_at
+    end
+    assert_not_nil first
+
+    travel_to Time.zone.local(2026, 3, 4, 10, 0, 0) do
+      @application.update!(notes: "follow up")
+    end
+
+    assert_equal first.change(usec: 0), @application.reload.applied_at.change(usec: 0)
+  end
+
+  test "keeps the first applied_at when moving applied, interview, applied" do
+    start = Time.zone.local(2026, 3, 2, 10, 0, 0)
+    first = nil
+
+    travel_to start do
+      @application.update!(status: :applied)
+      first = @application.applied_at
+    end
+    assert_not_nil first
+
+    travel_to start + 1.day do
+      @application.update!(status: :interview)
+    end
+
+    travel_to start + 2.days do
+      @application.update!(status: :applied)
+    end
+
+    assert_equal first.change(usec: 0), @application.reload.applied_at.change(usec: 0)
   end
 end
