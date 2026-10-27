@@ -1,0 +1,21 @@
+# Loaded by sidekiq-cron on the worker only. The time zone is part of the
+# cron string, so these times mean India time.
+fetch_jobs:
+  cron: "0 */6 * * * Asia/Kolkata"
+  class: "FetchJobsJob"
+  queue: "default"
+  active_job: true
+
+send_alerts_daily:
+  cron: "0 8 * * * Asia/Kolkata"
+  class: "SendAlertsJob"
+  args: ["daily"]
+  queue: "default"
+  active_job: true
+
+send_alerts_weekly:
+  cron: "0 8 * * 1 Asia/Kolkata"
+  class: "SendAlertsJob"
+  args: ["weekly"]
+  queue: "default"
+  active_job: true
