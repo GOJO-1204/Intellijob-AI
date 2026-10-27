@@ -1,0 +1,13 @@
+<div class="max-w-md mx-auto mt-16 p-6 bg-white border border-gray-200 rounded-lg">
+  <% if @paused %>
+    <h1 class="text-2xl font-semibold text-gray-900">Alerts paused</h1>
+    <p class="mt-3 text-gray-700">You will no longer get job alert emails.</p>
+    <%= link_to "Change your alert settings", edit_preferences_path,
+          class: "inline-block mt-6 text-[#0F766E] hover:text-[#115E59] underline" %>
+  <% else %>
+    <h1 class="text-2xl font-semibold text-gray-900">This link is not valid</h1>
+    <p class="mt-3 text-gray-700">It may be incomplete or out of date.</p>
+    <%= link_to "Go to the home page", root_path,
+          class: "inline-block mt-6 text-[#0F766E] hover:text-[#115E59] underline" %>
+  <% end %>
+</div>
