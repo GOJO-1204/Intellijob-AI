@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_09_072601) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_103425) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,6 +72,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_09_072601) do
     t.jsonb "embedding"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["posted_at"], name: "index_jobs_on_posted_at"
     t.index ["url"], name: "index_jobs_on_url", unique: true
   end
 

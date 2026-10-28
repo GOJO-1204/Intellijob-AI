@@ -19,3 +19,9 @@ send_alerts_weekly:
   args: ["weekly"]
   queue: "default"
   active_job: true
+
+cleanup_jobs:
+  cron: "0 3 * * * Asia/Kolkata"
+  class: "CleanupJobsJob"
+  queue: "default"
+  active_job: true
