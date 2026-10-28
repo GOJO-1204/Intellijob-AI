@@ -11,19 +11,16 @@
       <%= job_application.score ? "#{(job_application.score * 100).round}%" : "n/a" %>
     </p>
   </div>
-  <%= form_with model: job_application, class: "mt-3 space-y-2" do |f| %>
+  <%= form_with model: job_application, class: "mt-3" do |f| %>
     <div class="flex items-center gap-2">
       <%= f.select :status, JobApplication.statuses.keys.map { |s| [ s.humanize, s ] }, {},
             id: dom_id(job_application, :status), "aria-label": "Status",
             class: "rounded-md border border-gray-300 px-2 py-1 text-sm" %>
       <%= f.submit "Save", class: "rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50" %>
     </div>
-    <%= f.text_area :notes, rows: 2, placeholder: "Notes", id: dom_id(job_application, :notes),
-          "aria-label": "Notes", class: "w-full rounded-md border border-gray-300 px-2 py-1 text-sm" %>
-    <% if local_assigns[:notice] %>
-      <p class="text-xs text-green-700" role="status"><%= notice %></p>
-    <% end %>
   <% end %>
+  <%= render "job_applications/notes", job_application: job_application,
+        notice: local_assigns[:notice] %>
   <div class="mt-3 flex items-center gap-2">
     <% if job.url.to_s.match?(%r{\Ahttps?://}i) %>
       <%= link_to "Apply", job.url, target: "_blank", rel: "noopener noreferrer",

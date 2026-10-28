@@ -4,10 +4,12 @@ class JobApplicationsController < ApplicationController
     attrs = params.expect(job_application: %i[status notes])
     return head :unprocessable_entity unless valid_status?(attrs[:status])
 
-    @job_application.update!(attrs)
+    saved = @job_application.update(attrs)
     respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_back_or_to matches_path }
+      format.turbo_stream { render status: (saved ? :ok : :unprocessable_entity) }
+      format.html do
+        saved ? redirect_back_or_to(matches_path) : head(:unprocessable_entity)
+      end
     end
   end
 

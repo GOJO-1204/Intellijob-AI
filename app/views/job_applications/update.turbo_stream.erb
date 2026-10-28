@@ -1,4 +1,5 @@
-<% if @job_application.dismissed? %>
+<% failed = @job_application.errors.any? %>
+<% if !failed && @job_application.dismissed? %>
   <%= turbo_stream.remove dom_id(@job_application) %>
   <% if current_user.job_applications.matched.none? %>
     <%= turbo_stream.update "matches_list" do %>
@@ -7,6 +8,7 @@
   <% end %>
 <% else %>
   <%= turbo_stream.replace dom_id(@job_application) do %>
-    <%= render partial: "job_applications/job_application", locals: { job_application: @job_application, notice: "Saved." } %>
+    <%= render partial: "job_applications/job_application",
+          locals: { job_application: @job_application, notice: (failed ? nil : "Saved.") } %>
   <% end %>
 <% end %>

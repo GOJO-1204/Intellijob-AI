@@ -1,8 +1,11 @@
 class JobApplication < ApplicationRecord
+  NOTES_MAX_LENGTH = 500
+
   belongs_to :user
   belongs_to :job
 
   validates :job_id, uniqueness: { scope: :user_id }
+  validates :notes, length: { maximum: NOTES_MAX_LENGTH }, allow_blank: true
 
   # Hash form is required: the column is a string, so an array would store integers.
   enum :status, {
