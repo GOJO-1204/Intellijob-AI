@@ -1,0 +1,10 @@
+<% if seconds_left.positive? %>
+  <p class="mt-4 text-sm text-gray-600" role="status" data-analysis-poll="<%= seconds_left %>">
+    Still checking. This page updates by itself.
+  </p>
+<% else %>
+  <p class="mt-4 text-sm text-gray-600">
+    This is taking longer than expected, or no AI tips could be made right now. Use Refresh to check again.
+  </p>
+<% end %>
+<%= link_to "Refresh", profile_path, class: "mt-4 inline-flex rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>

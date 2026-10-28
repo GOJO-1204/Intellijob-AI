@@ -1,4 +1,6 @@
 class ProfilesController < ApplicationController
+  ANALYSIS_WINDOW = 90 # seconds the results page may keep checking for AI tips
+
   def new; end
 
   def create
@@ -19,12 +21,26 @@ class ProfilesController < ApplicationController
 
   def show
     @profile = current_user.profile
-    return if @profile&.resume_text.present?
+    if @profile&.resume_text.blank?
+      redirect_to new_profile_path, alert: "Please upload a resume with readable text."
+      return
+    end
 
-    redirect_to new_profile_path, alert: "Please upload a resume with readable text."
+    @seconds_left = analysis_seconds_left(@profile)
   end
 
   private
+
+  # Finished means ai_suggestions is filled in. Otherwise the clock runs from
+  # the moment the resume file was attached, so other profile saves cannot reset it.
+  def analysis_seconds_left(profile)
+    return 0 if Array(profile.ai_suggestions).any?
+
+    started = profile.resume_attachment&.created_at
+    return 0 if started.nil?
+
+    [ (ANALYSIS_WINDOW - (Time.current - started)).ceil, 0 ].max
+  end
 
   def resume_param
     params.fetch(:profile, {}).permit(:resume)[:resume]
