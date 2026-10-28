@@ -95,7 +95,7 @@ ROUTES (final)
 
 VIEWS (A unless noted)
   layouts/application, shared/_navbar, shared/_flash, shared/_empty_state (locals title, message),
-  profiles/new, profiles/show, preferences/edit, preferences/_skills, matches/index,
+  profiles/new, profiles/show (partials _results, _tips, _analysis_status), preferences/edit, preferences/_skills, matches/index,
   job_applications/_job_application (card: li with dom_id, status select, notes, Save, Dismiss,
   Apply; replaced by turbo_stream, no turbo_frame), job_applications/update.turbo_stream,
   job_applications/new (planned Day 10, A-10.3, not built yet),

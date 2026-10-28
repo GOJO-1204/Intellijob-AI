@@ -1,0 +1,9 @@
+<ul class="mt-3 space-y-3">
+  <% tips.each do |t| %>
+    <li class="rounded-md border border-gray-200 p-3 text-sm">
+      <p class="text-gray-500">Before: <%= t["original"] %></p>
+      <p class="mt-1 text-gray-900">After: <%= t["improved"] %></p>
+      <p class="mt-1 text-xs text-gray-600"><%= t["why"] %></p>
+    </li>
+  <% end %>
+</ul>
