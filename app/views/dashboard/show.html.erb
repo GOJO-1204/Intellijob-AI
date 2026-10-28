@@ -1,3 +1,17 @@
-<%= render "shared/empty_state",
-      title: "No applications yet",
-      message: "Your matched jobs will appear here." %>
+<div class="mx-auto max-w-3xl py-10">
+  <h1 class="text-2xl font-semibold text-gray-900">Your applications</h1>
+
+  <%= render "dashboard/tabs", tabs: @tabs, current: @tab, counts: @counts %>
+
+  <div id="applications_list" class="mt-6">
+    <% if @applications.empty? %>
+      <%= render "shared/empty_state",
+            title: "No applications yet",
+            message: "Applications with the status #{@tab} will appear here." %>
+    <% else %>
+      <ul class="space-y-3">
+        <%= render partial: "job_applications/job_application", collection: @applications %>
+      </ul>
+    <% end %>
+  </div>
+</div>
