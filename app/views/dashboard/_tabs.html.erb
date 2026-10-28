@@ -1,0 +1,14 @@
+<nav aria-label="Application status"
+     class="mt-6 flex flex-wrap gap-x-4 gap-y-1 border-b border-gray-200">
+  <% tabs.each do |tab| %>
+    <% active = tab == current %>
+    <%= link_to dashboard_path(status: tab),
+          "aria-current": (active ? "page" : nil),
+          class: [
+            "-mb-px border-b-2 px-1 py-2 text-sm font-medium",
+            active ? "border-[#0F766E] text-[#0F766E]" : "border-transparent text-gray-600 hover:text-[#115E59]"
+          ] do %>
+      <%= tab.humanize %> <span class="text-gray-500"><%= counts.fetch(tab, 0) %></span>
+    <% end %>
+  <% end %>
+</nav>
