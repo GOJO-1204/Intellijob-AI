@@ -8,10 +8,9 @@ class ProfilesController < ApplicationController
     return rerender("Please choose a resume file.") if resume.blank?
 
     profile = current_user.profile || current_user.build_profile
-    profile.resume = resume
-    profile.save!
-    profile.update!(resume_text: ResumeParser.call(profile.resume))
+    replace_resume(profile, resume)
     ResumeAnalysisJob.perform_later(profile.id)
+    EmbedRecordsJob.perform_later
     redirect_to profile_path
   rescue ResumeParser::Error => e
     rerender(e.message)
@@ -31,15 +30,27 @@ class ProfilesController < ApplicationController
 
   private
 
-  # Finished means ai_suggestions is filled in. Otherwise the clock runs from
-  # the moment the resume file was attached, so other profile saves cannot reset it.
+  # Finished means ai_suggestions is filled in. The clock runs from the resume attachment.
   def analysis_seconds_left(profile)
-    return 0 if Array(profile.ai_suggestions).any?
+    return 0 if Array(profile.ai_suggestions).any? || profile.resume_attachment.nil?
 
-    started = profile.resume_attachment&.created_at
-    return 0 if started.nil?
+    [ (ANALYSIS_WINDOW - (Time.current - profile.resume_attachment.created_at)).ceil, 0 ].max
+  end
 
-    [ (ANALYSIS_WINDOW - (Time.current - started)).ceil, 0 ].max
+  # Upload first, then attach, parse and clear old results together.
+  # On any failure the database rolls back and the new blob is removed.
+  def replace_resume(profile, upload)
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: upload.tempfile, filename: upload.original_filename, content_type: upload.content_type
+    )
+    Profile.transaction do
+      profile.update!(resume: blob)
+      profile.update!(resume_text: ResumeParser.call(profile.resume),
+                      ats_score: nil, ats_feedback: {}, ai_suggestions: [], embedding: nil)
+    end
+  rescue StandardError
+    blob&.purge
+    raise
   end
 
   def resume_param
