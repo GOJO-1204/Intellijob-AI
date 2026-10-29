@@ -45,6 +45,7 @@ resume_analyzer.rb (A)     ResumeAnalyzer.new(text, target_skills:, page_count:)
 resume_ai_reviewer.rb (A)  ResumeAiReviewer.new(text, target_role:).call -> Array<Hash>
 skill_extractor.rb (A)     SkillExtractor.call(text) -> Array<String>
                            (uses ResumeAnalyzer::COMMON_SKILLS)
+manual_job_adder.rb (A)    ManualJobAdder.call(user, attrs) -> Hash {application:, error:}
 job_sources.rb (B)         JobSources.all -> [Remotive, Adzuna]
 job_sources/remotive.rb (B) JobSources::Remotive.fetch -> Array<Hash>
 job_sources/adzuna.rb (B)   JobSources::Adzuna.fetch -> Array<Hash> (same keys)
@@ -78,7 +79,7 @@ profiles_controller (A)     new, create (resume upload), show (ATS results)
 preferences_controller (A)  edit, update (the question form)
 matches_controller (A)      index (current user's matched applications by score)
 job_applications_controller (A)  update (permits status, notes; turbo_stream)
-                                 new, create: planned Day 10 (A-10.3), not built yet (add a job applied elsewhere)
+                                 new, create (add a job applied elsewhere; uses ManualJobAdder)
 dashboard_controller (A)    show (tabs by params[:status])
 unsubscribes_controller (B) show (finds user by token, sets alert_frequency 'paused',
                             no login needed)
@@ -90,7 +91,7 @@ ROUTES (final)
   resource :preferences, only: %i[edit update]
   resources :matches, only: :index
   resource :dashboard, only: :show, controller: 'dashboard'
-  resources :job_applications, only: :update     <- new/create planned Day 10 (A-10.3), not built yet
+  resources :job_applications, only: %i[new create update]
   get 'unsubscribe/:token', to: 'unsubscribes#show', as: :unsubscribe
 
 VIEWS (A unless noted)
@@ -98,7 +99,7 @@ VIEWS (A unless noted)
   profiles/new, profiles/show (partials _results, _tips, _analysis_status), preferences/edit, preferences/_skills, matches/index,
   job_applications/_job_application (card: li with dom_id, status select, notes, Save, Dismiss,
   Apply; replaced by turbo_stream, no turbo_frame), job_applications/update.turbo_stream,
-  job_applications/new (planned Day 10, A-10.3, not built yet),
+  job_applications/new (form: title, company, url, location, status),
   dashboard/show (shell with empty state so far), dashboard/_stats (B)
 
 CONFIG (B)
@@ -116,5 +117,5 @@ PIPELINE (who triggers whom)
   Every 6h -> FetchJobsJob -> JobSources.all -> Job.upsert_from -> EmbedRecordsJob
     -> MatchJobsJob -> Matcher -> JobApplication rows (status matched)
   Daily/weekly -> SendAlertsJob -> JobAlertMailer -> notified_at set
-  User actions -> JobApplicationsController#update (status, notes)
+  User actions -> JobApplicationsController#update (status, notes), #create -> ManualJobAdder (manual job)
   Dashboard -> DashboardController#show -> DashboardStats.call(user)

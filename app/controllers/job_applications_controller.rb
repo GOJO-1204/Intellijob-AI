@@ -1,4 +1,19 @@
 class JobApplicationsController < ApplicationController
+  def new
+    @form = {}
+  end
+
+  def create
+    result = ManualJobAdder.call(current_user, manual_params)
+    if result[:error]
+      @form = manual_params
+      @error = result[:error]
+      render :new, status: :unprocessable_entity
+    else
+      redirect_to dashboard_path(status: result[:application].status), notice: "Job added."
+    end
+  end
+
   def update
     @job_application = current_user.job_applications.find(params[:id])
     attrs = params.expect(job_application: %i[status notes])
@@ -14,6 +29,10 @@ class JobApplicationsController < ApplicationController
   end
 
   private
+
+  def manual_params
+    params.fetch(:job, {}).permit(:title, :company, :url, :location, :status).to_h
+  end
 
   def valid_status?(status)
     status.nil? || JobApplication.statuses.key?(status)
