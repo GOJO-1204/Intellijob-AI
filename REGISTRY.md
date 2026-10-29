@@ -64,8 +64,9 @@ match_jobs_job.rb (B)       perform(user_id = nil)  nil = all ready profiles.
                             find_or_create_by, never overwrites an existing status.
 send_alerts_job.rb (B)      perform(frequency)  'daily' or 'weekly'. Top 5 alertable
                             per user via JobAlertMailer, then sets notified_at.
-cleanup_jobs_job.rb (B)     perform  deletes jobs older than 30 days that only have
-                            'matched' applications.
+cleanup_jobs_job.rb (B)     perform  deletes jobs with posted_at older than 30 days, with their 'matched'
+                            applications, in batches of 500. Never deletes jobs with source 'manual' or
+                            jobs with an application in any other status. Jobs without posted_at are kept.
 
 MAILER (B)
 job_alert_mailer.rb  new_matches(user, applications) mails user.email.
@@ -100,7 +101,7 @@ VIEWS (A unless noted)
   job_applications/_job_application (card: li with dom_id, status select, notes, Save, Dismiss,
   Apply; replaced by turbo_stream, no turbo_frame), job_applications/update.turbo_stream,
   job_applications/new (form: title, company, url, location, status),
-  dashboard/show (shell with empty state so far), dashboard/_stats (B)
+  dashboard/show (heading, tabs, list of applications or empty state), dashboard/_tabs
 
 CONFIG (B)
   config/initializers/sidekiq.rb, config/sidekiq_cron.yml:
@@ -111,7 +112,7 @@ CONFIG (B)
 
 PIPELINE (who triggers whom)
   Upload -> ProfilesController#create -> ResumeParser -> profile.update(resume_text:)
-    -> ResumeAnalysisJob (ATS score + Gemini tips)
+    -> ResumeAnalysisJob (ATS score + Gemini tips), and EmbedRecordsJob
   Save questions -> PreferencesController#update -> profile.update(embedding: nil)
     -> EmbedRecordsJob
   Every 6h -> FetchJobsJob -> JobSources.all -> Job.upsert_from -> EmbedRecordsJob
