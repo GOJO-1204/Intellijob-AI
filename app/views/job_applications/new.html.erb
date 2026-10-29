@@ -1,0 +1,41 @@
+<div class="mx-auto max-w-xl py-10">
+  <h1 class="text-2xl font-semibold text-gray-900">Add a job you applied to</h1>
+  <p class="mt-2 text-sm text-gray-600">Use this for jobs you found somewhere else. Paste the link to the job post.</p>
+
+  <% if @error %>
+    <p class="mt-4 rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert"><%= @error %></p>
+  <% end %>
+
+  <%= form_with scope: :job, url: job_applications_path, class: "mt-6 space-y-4" do |f| %>
+    <div>
+      <%= f.label :title, "Job title", class: "block text-sm font-medium text-gray-900" %>
+      <%= f.text_field :title, value: @form["title"], required: true, maxlength: 200,
+            class: "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+    </div>
+    <div>
+      <%= f.label :company, "Company", class: "block text-sm font-medium text-gray-900" %>
+      <%= f.text_field :company, value: @form["company"], required: true, maxlength: 200,
+            class: "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+    </div>
+    <div>
+      <%= f.label :url, "Link to the job post", class: "block text-sm font-medium text-gray-900" %>
+      <%= f.url_field :url, value: @form["url"], required: true, maxlength: 2000, placeholder: "https://",
+            class: "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+    </div>
+    <div>
+      <%= f.label :location, "Location (optional)", class: "block text-sm font-medium text-gray-900" %>
+      <%= f.text_field :location, value: @form["location"], maxlength: 200,
+            class: "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+    </div>
+    <div>
+      <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-900" %>
+      <%= f.select :status, ManualJobAdder::STATUSES.map { |s| [ s.humanize, s ] },
+            { selected: @form["status"].presence || "applied" },
+            class: "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm" %>
+    </div>
+    <div class="flex items-center gap-4">
+      <%= f.submit "Add job", class: "rounded-md bg-[#0F766E] px-4 py-2 text-sm font-medium text-white hover:bg-[#115E59]" %>
+      <%= link_to "Cancel", dashboard_path, class: "text-sm font-medium text-[#0F766E] hover:text-[#115E59]" %>
+    </div>
+  <% end %>
+</div>
