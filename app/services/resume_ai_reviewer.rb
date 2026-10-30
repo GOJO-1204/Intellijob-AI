@@ -14,7 +14,7 @@ class ResumeAiReviewer
 
     parse(post(request_body))
   rescue StandardError => e
-    Rails.logger.error("ResumeAiReviewer failed: #{e.class}")
+    Rails.logger.error("ResumeAiReviewer failed: #{e.class} code=#{e.try(:code)}")
     []
   end
 
@@ -37,14 +37,7 @@ class ResumeAiReviewer
   end
 
   def post(payload)
-    uri = URI(URL)
-    req = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
-    req["x-goog-api-key"] = Rails.application.credentials.dig(:gemini, :api_key)
-    req.body = payload.to_json
-    res = Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 30, read_timeout: 30) { |h| h.request(req) }
-    raise "HTTP #{res.code}" unless res.is_a?(Net::HTTPSuccess)
-
-    res.body
+    GeminiClient.call(URL, payload)
   end
 
   def parse(body)

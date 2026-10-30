@@ -43,6 +43,9 @@ SERVICES
 resume_parser.rb (A)       ResumeParser.call(attachment) -> String
 resume_analyzer.rb (A)     ResumeAnalyzer.new(text, target_skills:, page_count:).call -> Hash
 resume_ai_reviewer.rb (A)  ResumeAiReviewer.new(text, target_role:).call -> Array<Hash>
+gemini_client.rb (A)       GeminiClient.call(url, payload) -> String (response body)
+                           Tries up to 3 times, retries only HTTP 503 and timeouts,
+                           other errors raise GeminiClient::Error (code, retryable) at once.
 skill_extractor.rb (A)     SkillExtractor.call(text) -> Array<String>
                            (uses ResumeAnalyzer::COMMON_SKILLS)
 manual_job_adder.rb (A)    ManualJobAdder.call(user, attrs) -> Hash {application:, error:}
