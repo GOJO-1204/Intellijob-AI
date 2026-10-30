@@ -15,7 +15,11 @@ class ResumeParser
       when DOCX_TYPE then read_docx(data)
       else raise Error, "Please upload a PDF or DOCX file."
       end
-    clean(text)
+    result = clean(text)
+    if result.blank?
+      raise Error, "We could not find any text in that file. Please upload a PDF or DOCX that is not a scan or an image."
+    end
+    result
   rescue Error
     raise
   rescue StandardError

@@ -40,13 +40,17 @@ class ProfilesUploadTest < ActionDispatch::IntegrationTest
     assert_enqueued_with(job: ResumeAnalysisJob, args: [ user.profile.id ])
   end
 
-    test "a PDF without readable text sends the user back to upload" do
+  test "a PDF without readable text shows an error and enqueues nothing" do
     original = ResumeParser.method(:call)
-    ResumeParser.define_singleton_method(:call) { |_attachment| "" }
-    signed_in_user
-    upload(fixture_file_upload("sample.pdf", "application/pdf", true))
-    follow_redirect!
-    assert_redirected_to new_profile_path
+    message = "We could not find any text in that file."
+    ResumeParser.define_singleton_method(:call) { |_attachment| raise ResumeParser::Error, message }
+    user = signed_in_user
+    assert_no_enqueued_jobs do
+      upload(fixture_file_upload("sample.pdf", "application/pdf", true))
+    end
+    assert_response :unprocessable_entity
+    assert_includes response.body, message
+    assert_nil user.profile.reload.resume_text
   ensure
     ResumeParser.define_singleton_method(:call, original)
   end

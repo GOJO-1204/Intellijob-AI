@@ -37,4 +37,24 @@ class ResumeParserTest < ActiveSupport::TestCase
     error = assert_raises(ResumeParser::Error) { ResumeParser.call(fake("application/pdf", "not a pdf")) }
     assert_equal "We couldn't read that file. It may be corrupt.", error.message
   end
+
+  def blank_pdf
+    objs = [ "<</Type/Catalog/Pages 2 0 R>>", "<</Type/Pages/Kids[3 0 R]/Count 1>>",
+             "<</Type/Page/Parent 2 0 R/MediaBox[0 0 200 200]>>" ]
+    out = +"%PDF-1.4\n"
+    offs = objs.each_with_index.map do |obj, i|
+      pos = out.bytesize
+      out << "#{i + 1} 0 obj\n#{obj}\nendobj\n"
+      pos
+    end
+    xref = out.bytesize
+    out << "xref\n0 4\n0000000000 65535 f \n"
+    offs.each { |pos| out << format("%010d 00000 n \n", pos) }
+    out << "trailer\n<</Root 1 0 R/Size 4>>\nstartxref\n#{xref}\n%%EOF\n"
+  end
+
+  test "raises when the PDF has no readable text" do
+    error = assert_raises(ResumeParser::Error) { ResumeParser.call(fake("application/pdf", blank_pdf)) }
+    assert_includes error.message, "could not find any text"
+  end
 end
