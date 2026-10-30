@@ -6,7 +6,7 @@ Here are your latest job matches:
 <% job = application.job -%>
 
 <%= job.title %>
-<%= job.company %><%= " - #{job.location}" if job.location.present? %>
+<%= job.company %><%= ", #{job.location}" if job.location.present? %>
 <% unless application.score.nil? -%>
 Match: <%= (application.score * 100).round %>%
 <% end -%>
