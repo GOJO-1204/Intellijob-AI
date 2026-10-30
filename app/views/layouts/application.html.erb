@@ -14,9 +14,9 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
@@ -29,5 +29,11 @@
       <%= render "shared/flash" %>
       <%= yield %>
     </main>
+    <footer class="mx-auto max-w-5xl border-t border-gray-200 px-4 py-6 text-sm">
+      <nav aria-label="Legal" class="flex gap-4">
+        <%= link_to "Privacy", privacy_path, class: "text-teal-700 hover:text-teal-800" %>
+        <%= link_to "Terms", terms_path, class: "text-teal-700 hover:text-teal-800" %>
+      </nav>
+    </footer>
   </body>
 </html>
