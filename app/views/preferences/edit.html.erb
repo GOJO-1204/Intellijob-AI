@@ -24,7 +24,7 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <%= f.check_box :remote, class: "h-4 w-4 rounded border-gray-300" %>
+      <%= f.check_box :remote, class: "h-4 w-4 rounded border-gray-300 accent-teal-700" %>
       <%= f.label :remote, "Open to remote work", class: "text-sm text-gray-700" %>
     </div>
 
@@ -43,6 +43,6 @@
       <%= f.select :alert_frequency, Profile::ALERT_FREQUENCIES.map { |v| [ v.capitalize, v ] }, {}, class: inp %>
     </div>
 
-    <%= f.submit "Save preferences", class: "inline-flex cursor-pointer items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500" %>
+    <%= f.submit "Save preferences", class: "inline-flex cursor-pointer items-center rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white hover:bg-teal-800" %>
   <% end %>
 </div>
