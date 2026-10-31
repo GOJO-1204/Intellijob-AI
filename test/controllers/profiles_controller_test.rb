@@ -38,7 +38,10 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
     signed_in_profile(resume_text: "x", ats_score: 62, ats_feedback: { checks: checks, shortcomings: fixes }, ai_suggestions: tips)
     get profile_path
     assert_response :success
-    assert_select "td", "Contact details"
+    assert_select "li span", "Contact details"
+    assert_select "li span", "15 / 15"
+    assert_select "[role='progressbar'][aria-label='Contact details'][aria-valuemin='0'][aria-valuemax='15'][aria-valuenow='15']"
+    assert_select "[role='progressbar'] div[style='width: 100%']"
     assert_select "li", /Only 2 bullet lines found/
     assert_select "li", /Built features/
   end
