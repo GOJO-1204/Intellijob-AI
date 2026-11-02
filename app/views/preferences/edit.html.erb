@@ -6,7 +6,7 @@
 
   <% if @profile.errors.any? %>
     <div class="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-      <%= @profile.errors.full_messages.to_sentence %>
+      <%= "#{@profile.errors.full_messages.to_sentence}." %>
     </div>
   <% end %>
 

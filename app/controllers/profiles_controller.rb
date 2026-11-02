@@ -15,7 +15,7 @@ class ProfilesController < ApplicationController
   rescue ResumeParser::Error => e
     rerender(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    rerender(e.record.errors.full_messages.to_sentence)
+    rerender("#{e.record.errors.full_messages.to_sentence}.")
   end
 
   def show
