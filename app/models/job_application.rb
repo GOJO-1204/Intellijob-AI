@@ -20,9 +20,15 @@ class JobApplication < ApplicationRecord
 
   scope :alertable, -> { where(status: :matched, notified_at: nil) }
 
+  before_validation :normalize_notes
   before_save :set_applied_at_once
 
   private
+
+  # A browser counts a line break as 1 character but sends it as CRLF, so store LF.
+  def normalize_notes
+    self.notes = notes.gsub(/\r\n?/, "\n") if notes
+  end
 
   # Only stamps on the change into "applied", and never overwrites an existing value.
   def set_applied_at_once

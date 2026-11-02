@@ -32,10 +32,21 @@ class NotesLinebreaksTest < ActionDispatch::IntegrationTest
     assert_equal 500, record.reload.notes.length
   end
 
-  test "the same note with CRLF line breaks is 510 characters and is refused" do
+  test "the same note with CRLF line breaks is stored with LF and saved" do
     record = signed_in_record
     note = note_with("\r\n")
     assert_equal 510, note.length
+    save_note(record, note)
+    assert_response :success
+    saved = record.reload.notes
+    assert_equal 500, saved.length
+    assert_not_includes saved, "\r"
+  end
+
+  test "a CRLF note of 501 characters after normalizing is still refused" do
+    record = signed_in_record
+    note = note_with("\r\n") + "a"
+    assert_equal 511, note.length
     save_note(record, note)
     assert_response :unprocessable_entity
     assert_nil record.reload.notes
