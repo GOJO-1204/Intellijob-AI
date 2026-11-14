@@ -1,5 +1,56 @@
 <div class="max-w-2xl mx-auto mt-16 p-6 bg-white border border-gray-200 rounded-lg">
   <h1 class="text-2xl font-semibold text-gray-900">Privacy Policy</h1>
-  <p class="mt-3 text-gray-700">The full Privacy Policy is being finished and will be published here before launch. For questions, write to mangarajbibek1209@gmail.com.</p>
-  <%= link_to "Go to the home page", root_path, class: "inline-block mt-6 text-[#0F766E] hover:text-[#115E59] underline" %>
+  <p class="text-sm text-gray-500">Last updated: November 2026</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Who we are</h2>
+  <p class="mt-3 text-gray-700">IntelliJob is a student project. It finds job listings, ranks them against your resume and preferences, and sends job alert emails. In this policy, "we" means IntelliJob and "you" means the person using it.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">What we collect</h2>
+  <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-700">
+    <li>Account: your email address and your password. The password is stored only as a hash, so we cannot read it. Password reset links are sent by email.</li>
+    <li>Resume: the file you upload (PDF or DOCX, up to 5 MB) and the text taken from it.</li>
+    <li>Job preferences: target role, skills, location, remote option, minimum salary, experience level and alert frequency.</li>
+    <li>Results we calculate: the resume check score and feedback, AI writing tips, and a list of numbers (an embedding) made from your resume text. The embedding is used only for matching. It stays in our database and is not sent to anyone.</li>
+    <li>Your job list: matched jobs, your status for each job (saved, applied and so on), your notes and dates.</li>
+    <li>Technical logs: our server keeps technical logs. They can include your IP address and the pages requested. Our code logs error types, not resume text.</li>
+  </ul>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">How we use it</h2>
+  <p class="mt-3 text-gray-700">We use your data to run your account, to find and rank jobs, to show the resume check and AI writing tips, and to send alert emails. We do not sell your data. We do not show advertising.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Who receives it</h2>
+  <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-700">
+    <li>Google Gemini API: to create AI writing tips, we send your target role and the first 8000 characters of your resume text, exactly as written. A resume can contain a name, phone number or email address, so these may be sent too.</li>
+    <li>Email delivery service: it receives your email address and the content of the emails we send you, such as alerts and password reset links.</li>
+    <li>Hosting provider: our hosting provider stores our data.</li>
+    <li>Job sources: Remotive and Adzuna receive no personal data. We send them fixed search requests only.</li>
+    <li>Other websites: apply links in listings and emails lead to employers or job boards. They have their own policies.</li>
+  </ul>
+  <p class="mt-3 text-gray-700">We use the free tier of the Gemini API. Under Google's terms for the free tier, Google may use content sent to the API to improve its products. If you do not want this, do not upload a resume, or remove personal details from it first.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Cookies</h2>
+  <p class="mt-3 text-gray-700">We use one session cookie to keep you signed in. If you choose to stay signed in, we also use a remember-me cookie. We do not use analytics, advertising, third party scripts, external fonts or CDNs.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">How long we keep it and deleting your account</h2>
+  <p class="mt-3 text-gray-700">We keep your data until you delete your account. You can delete it with the Cancel my account button on the page where you edit your account. This deletes your profile, resume file, resume text, job list and notes. Data already sent to Google is handled under Google's terms, and we cannot delete it for you. We have not set a fixed period for technical logs.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Email alerts</h2>
+  <p class="mt-3 text-gray-700">Alert emails go to the email address on your account, daily or weekly as you choose. Each alert email has an unsubscribe link that pauses alerts at once. You can also change the alert frequency in your preferences.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Your choices</h2>
+  <p class="mt-3 text-gray-700">You can see and change your profile and preferences, replace your resume and delete your account. For other requests, write to <%= mail_to "mangarajbibek1209@gmail.com", nil, class: "text-teal-700 hover:text-teal-800 underline" %>.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Age</h2>
+  <p class="mt-3 text-gray-700">IntelliJob is for people who are 18 or older. If you think someone under 18 has an account, write to us.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Security</h2>
+  <p class="mt-3 text-gray-700">We take reasonable steps to protect your data. Passwords are stored only as hashes, and our code does not log resume text. No online service can promise perfect protection.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Changes to this policy</h2>
+  <p class="mt-3 text-gray-700">We may update this policy. The date at the top shows the last change. If you keep using IntelliJob after a change, the new policy applies.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">Contact</h2>
+  <p class="mt-3 text-gray-700">Questions about this policy: <%= mail_to "mangarajbibek1209@gmail.com", nil, class: "text-teal-700 hover:text-teal-800 underline" %>. You can also read the <%= link_to "Terms of Use", terms_path, class: "text-teal-700 hover:text-teal-800 underline" %>.</p>
+
+  <p class="mt-8"><%= link_to "Go to the home page", root_path, class: "text-teal-700 hover:text-teal-800 underline" %></p>
 </div>
