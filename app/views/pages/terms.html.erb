@@ -1,5 +1,47 @@
 <div class="max-w-2xl mx-auto mt-16 p-6 bg-white border border-gray-200 rounded-lg">
   <h1 class="text-2xl font-semibold text-gray-900">Terms of Use</h1>
-  <p class="mt-3 text-gray-700">The full Terms of Use are being finished and will be published here before launch. For questions, write to mangarajbibek1209@gmail.com.</p>
-  <%= link_to "Go to the home page", root_path, class: "inline-block mt-6 text-[#0F766E] hover:text-[#115E59] underline" %>
+  <p class="text-sm text-gray-500">Last updated: November 2026</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">1. Who can use IntelliJob</h2>
+  <p class="mt-3 text-gray-700">You must be 18 or older. Each account is for one person. In these terms, "we" means IntelliJob and "you" means the person using it.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">2. What IntelliJob does</h2>
+  <p class="mt-3 text-gray-700">IntelliJob finds job listings from public sources, ranks them for you, sends job alert emails, and gives a resume check and AI writing tips. The scores and AI tips are estimates and can be wrong. Check them before you use them. We do not promise jobs, interviews or any other result.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">3. Your account</h2>
+  <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-700">
+    <li>Give true information when you sign up.</li>
+    <li>Keep your password private.</li>
+    <li>You are responsible for activity on your account.</li>
+  </ul>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">4. Your resume and content</h2>
+  <p class="mt-3 text-gray-700">You keep ownership of your resume and other content. You allow us to process it to run the service. This includes sending it to the Google Gemini API, as described in the <%= link_to "Privacy Policy", privacy_path, class: "text-teal-700 hover:text-teal-800 underline" %>. Upload only what you have the right to upload.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">5. Acceptable use</h2>
+  <p class="mt-3 text-gray-700">Do not use IntelliJob in any of these ways:</p>
+  <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-700">
+    <li>for anything unlawful</li>
+    <li>to attack or overload the service</li>
+    <li>for automated scraping</li>
+    <li>to upload malware</li>
+    <li>to upload other people's personal data without their permission</li>
+  </ul>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">6. Job listings and third parties</h2>
+  <p class="mt-3 text-gray-700">Listings come from third parties and we do not check them. We are not an employer or a recruiter. When you apply, you do it on the other website, under its own rules. Never pay money to apply for a job.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">7. Availability and changes</h2>
+  <p class="mt-3 text-gray-700">IntelliJob is a student project and is provided "as is". We may change, pause or stop it. To the extent the law allows, we are not liable for losses from using the service.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">8. Ending your use</h2>
+  <p class="mt-3 text-gray-700">You can delete your account at any time. We may suspend accounts that break these terms.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">9. Changes to these terms</h2>
+  <p class="mt-3 text-gray-700">We may update these terms. The date at the top shows the last change. If you keep using IntelliJob after a change, the new terms apply.</p>
+
+  <h2 class="text-lg font-semibold text-gray-900 mt-8">10. Contact</h2>
+  <p class="mt-3 text-gray-700">Questions about these terms: <%= mail_to "mangarajbibek1209@gmail.com", nil, class: "text-teal-700 hover:text-teal-800 underline" %>. You can also read the <%= link_to "Privacy Policy", privacy_path, class: "text-teal-700 hover:text-teal-800 underline" %>.</p>
+
+  <p class="mt-8"><%= link_to "Go to the home page", root_path, class: "text-teal-700 hover:text-teal-800 underline" %></p>
 </div>
