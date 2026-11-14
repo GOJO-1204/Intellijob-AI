@@ -1,5 +1,6 @@
 <%# app/views/job_alert_mailer/new_matches.html.erb %>
 <div style="font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #222222;">
+  <p style="margin: 0 0 16px; font-size: 18px; font-weight: bold; color: #0F766E;">IntelliJob</p>
   <p style="font-size: 16px;">Hello,</p>
   <p style="font-size: 16px;">Here are your latest job matches:</p>
   <% @applications.each do |application| %>
@@ -18,7 +19,8 @@
     </div>
   <% end %>
   <p style="font-size: 14px;"><a href="<%= dashboard_url %>" style="color: #0F766E;">Open your dashboard</a></p>
-  <p style="font-size: 12px; color: #777777;">
-    <a href="<%= unsubscribe_url(token: @user.signed_id(purpose: :unsubscribe)) %>" style="color: #777777;">Unsubscribe from these alerts</a>
+  <p style="margin: 0 0 8px; font-size: 12px; color: #595959;">You are receiving this email because job alerts are turned on for your IntelliJob account.</p>
+  <p style="margin: 0; font-size: 12px; color: #595959;">
+    <a href="<%= unsubscribe_url(token: @user.signed_id(purpose: :unsubscribe)) %>" style="color: #595959;">Unsubscribe from these alerts</a>
   </p>
 </div>

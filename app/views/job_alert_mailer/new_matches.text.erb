@@ -1,4 +1,6 @@
 <%# app/views/job_alert_mailer/new_matches.text.erb %>
+IntelliJob
+
 Hello,
 
 Here are your latest job matches:
@@ -17,4 +19,5 @@ APPLY: <%= job.url %>
 
 Dashboard: <%= dashboard_url %>
 
+You are receiving this email because job alerts are turned on for your IntelliJob account.
 Unsubscribe: <%= unsubscribe_url(token: @user.signed_id(purpose: :unsubscribe)) %>
