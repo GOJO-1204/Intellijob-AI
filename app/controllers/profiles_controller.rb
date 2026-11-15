@@ -1,6 +1,9 @@
 class ProfilesController < ApplicationController
+  include RateLimitedResponse
+
   ANALYSIS_WINDOW = 90 # seconds the results page may keep checking for AI tips
-  rate_limit to: 10, within: 1.hour, by: -> { current_user.id }, store: RATE_LIMIT_STORE, only: :create
+  rate_limit to: 10, within: 1.hour, by: -> { current_user.id }, store: RATE_LIMIT_STORE, only: :create,
+             with: -> { rate_limited("You have uploaded too many resumes. Please try again in an hour.") }
 
   def new; end
 
