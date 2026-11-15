@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   ANALYSIS_WINDOW = 90 # seconds the results page may keep checking for AI tips
+  rate_limit to: 10, within: 1.hour, by: -> { current_user.id }, store: RATE_LIMIT_STORE, only: :create
 
   def new; end
 
