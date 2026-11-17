@@ -17,7 +17,7 @@ module JobSources
     end
 
     def self.build(job)
-      return if job["url"].to_s.strip.empty?
+      return unless job.is_a?(Hash) && !job["url"].to_s.strip.empty?
       { title: job["title"], company: job["company_name"], url: job["url"],
         description: job["description"], location: job["candidate_required_location"],
         remote: true, salary_min: nil, source: "remotive", external_id: job["id"].to_s,
