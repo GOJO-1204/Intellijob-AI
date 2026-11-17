@@ -1,7 +1,7 @@
 require "test_helper"
 
 class JobAlertMailerTest < ActionMailer::TestCase
-  UNSUBSCRIBE_URL = %r{/unsubscribe/([^"\s<]+)}
+  UNSUBSCRIBE_URL = %r{/unsubscribe\?token=([\w-]+)}
 
   setup do
     @user = User.create!(email: "mailer-test@example.com", password: "password123")
