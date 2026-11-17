@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resource :preferences, only: %i[edit update]
     resources :matches, only: :index
       resources :job_applications, only: %i[new create update]
-  get "unsubscribe/:token", to: "unsubscribes#show", as: :unsubscribe
+  resource :unsubscribe, only: %i[show create]
   get "privacy", to: "pages#privacy", as: :privacy
   get "terms", to: "pages#terms", as: :terms
 end

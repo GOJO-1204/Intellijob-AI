@@ -85,8 +85,9 @@ matches_controller (A)      index (current user's matched applications by score)
 job_applications_controller (A)  update (permits status, notes; turbo_stream)
                                  new, create (add a job applied elsewhere; uses ManualJobAdder)
 dashboard_controller (A)    show (tabs by params[:status])
-unsubscribes_controller (B) show (finds user by token, sets alert_frequency 'paused',
-                            no login needed)
+unsubscribes_controller (B) show (GET: finds the user by params[:token] and shows a confirm
+                            page, changes nothing), create (POST: sets alert_frequency 'paused',
+                            no login needed, CSRF protection stays on)
 
 ROUTES (final)
   root 'home#index'
@@ -96,7 +97,7 @@ ROUTES (final)
   resources :matches, only: :index
   resource :dashboard, only: :show, controller: 'dashboard'
   resources :job_applications, only: %i[new create update]
-  get 'unsubscribe/:token', to: 'unsubscribes#show', as: :unsubscribe
+  resource :unsubscribe, only: %i[show create]
 
 VIEWS (A unless noted)
   layouts/application, shared/_navbar, shared/_flash, shared/_empty_state (locals title, message),
