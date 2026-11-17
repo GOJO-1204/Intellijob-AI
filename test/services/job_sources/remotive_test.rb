@@ -56,6 +56,22 @@ class JobSourcesRemotiveTest < ActiveSupport::TestCase
     assert_equal 1, fetch_with(ok(jobs)).size
   end
 
+  test "a null entry in the jobs list is skipped and the valid jobs are kept" do
+    jobs = [ job_hash, nil, job_hash("id" => 124, "url" => "https://remotive.com/jobs/2") ]
+    result = fetch_with(ok(jobs))
+
+    assert_equal 2, result.size
+    assert_equal [ "https://remotive.com/jobs/1", "https://remotive.com/jobs/2" ], result.map { |job| job[:url] }
+  end
+
+  test "entries that are not hashes are skipped and the valid jobs are kept" do
+    jobs = [ job_hash, "text", 42, [ 1 ], true, job_hash("id" => 124, "url" => "https://remotive.com/jobs/2") ]
+    result = fetch_with(ok(jobs))
+
+    assert_equal 2, result.size
+    assert_equal [ "https://remotive.com/jobs/1", "https://remotive.com/jobs/2" ], result.map { |job| job[:url] }
+  end
+
   test "an empty jobs list gives an empty list" do
     assert_equal [], fetch_with(ok([]))
   end
